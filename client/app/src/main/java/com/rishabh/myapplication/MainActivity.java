@@ -10,7 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mouseMoved=false;
     private Socket socket;
     private PrintWriter out;
+    public RelativeLayout relativeLayout;
 
     private float initX =0;
     private float initY =0;
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playPauseButton = (Button)findViewById(R.id.playPauseButton);
         nextButton = (Button)findViewById(R.id.nextButton);
         previousButton = (Button)findViewById(R.id.previousButton);
+
+        relativeLayout=(RelativeLayout)findViewById(R.id.activity_main);
 
         playPauseButton.setOnClickListener(this);
         nextButton.setOnClickListener(this);
@@ -106,6 +111,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.playPauseButton:
+                InputMethodManager inputMethodManager =
+                        (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInputFromWindow(
+                        relativeLayout.getApplicationWindowToken(),
+                        InputMethodManager.SHOW_FORCED, 0);
                 if (isConnected && out!=null) {
                     new SendMessage().execute(Constants.PLAY);
                 }

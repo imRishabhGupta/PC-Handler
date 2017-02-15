@@ -21,7 +21,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Play/Pause"
+        android:text="Open Keyboard"
         android:id="@+id/playPauseButton"
         android:padding="10dp"
         android:layout_alignParentBottom="true"
@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:text="Previous"
         android:padding="10dp"
+        android:visibility="gone"
         android:id="@+id/previousButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -43,6 +44,7 @@
         android:text="Next"
         android:padding="10dp"
         android:id="@+id/nextButton"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
