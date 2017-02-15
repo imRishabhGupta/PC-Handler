@@ -43,14 +43,14 @@ public class RemoteDroidServer {
 		}
 			System.out.println("connected "+isConnected);
 		//read input from client while it  is connected
-	    while(isConnected){
+	    while(isConnected){      
 	    	System.out.println("working");
 	        try{
 			line = in.readLine(); //read input from client
 			System.out.println(line); //print whatever we get from client
 			
 			//if user clicks on next
-			if(line.equalsIgnoreCase("next")){
+			if(line.equalsIgnoreCase("next")){8+648
 				//Simulate press and release of key 'n'
 				robot.keyPress(KeyEvent.VK_N);
 				robot.keyRelease(KeyEvent.VK_N);
@@ -60,6 +60,13 @@ public class RemoteDroidServer {
 				//Simulate press and release of key 'p'
 				robot.keyPress(KeyEvent.VK_P);
 				robot.keyRelease(KeyEvent.VK_P);		        	
+			}
+			else if(line.contains("key-")){
+				int unicode=Integer.parseInt(line.split("-")[1]);
+				if(unicode!=0){
+					robot.keyPress(unicode);
+					robot.keyRelease(unicode);
+				}
 			}
 			//if user clicks on play/pause
 			else if(line.equalsIgnoreCase("play")){
