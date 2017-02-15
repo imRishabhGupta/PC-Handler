@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,7 +26,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, KeyEvent.Callback{
 
     Context context;
     Button playPauseButton;
@@ -105,6 +106,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(Void aVoid) {
             Log.d("SendMessage","message sent");
         }
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        String str=event.getDisplayLabel()+"";
+
+        Log.d("key event is ",event.getUnicodeChar()+"");
+        if(!event.isShiftPressed())
+            Log.d("key pressed is ",str.toLowerCase());
+        else
+            Log.d("key pressed is ",str.toUpperCase());
+
+        if(event.getUnicodeChar()!=0)
+            new SendMessage().execute("key-"+event.getUnicodeChar());
+        return super.onKeyUp(keyCode, event);
     }
 
     @Override
