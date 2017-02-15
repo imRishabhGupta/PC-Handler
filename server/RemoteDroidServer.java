@@ -22,27 +22,29 @@ public class RemoteDroidServer {
 	private static String line;
 	private static boolean isConnected=true;
 	private static Robot robot;
-	private static final int SERVER_PORT = 8998;
+	private static final int SERVER_PORT = 4444;
  
 	public static void main(String[] args) {
 		boolean leftpressed=false;
 		boolean rightpressed=false;
- 
 	    try{
-	    		robot = new Robot();
+	    	robot = new Robot();
 			server = new ServerSocket(SERVER_PORT); //Create a server socket on port 8998
+			System.out.println("connected");
 			client = server.accept(); //Listens for a connection to be made to this socket and accepts it
 			in = new BufferedReader(new InputStreamReader(client.getInputStream())); //the input stream where data will come from client
 		}catch (IOException e) {
-			System.out.println("Error in opening Socket");
+			System.out.println("Error in opening Socket "+e.toString());
+			isConnected=false;
 			System.exit(-1);
 		}catch (AWTException e) {
 			System.out.println("Error in creating robot instance");
 			System.exit(-1);
 		}
-			
-		//read input from client while it is connected
+			System.out.println("connected "+isConnected);
+		//read input from client while it  is connected
 	    while(isConnected){
+	    	System.out.println("working");
 	        try{
 			line = in.readLine(); //read input from client
 			System.out.println(line); //print whatever we get from client

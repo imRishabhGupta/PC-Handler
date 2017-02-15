@@ -6,8 +6,8 @@ package com.rishabh.myapplication.utils;
 
 public class Constants {
 
-    public static final String SERVER_IP = "192.168.1.106";
-    public static final int SERVER_PORT = 8998;
+    public static final String SERVER_IP = "192.168.0.106";
+    public static final int SERVER_PORT = 4444;
     public static final String PLAY="play";
     public static final String NEXT="next";
     public static final String PREVIOUS="previous";

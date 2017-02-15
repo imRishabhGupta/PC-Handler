@@ -1,4 +1,4 @@
-package com.rishabh.myapplication;
+   package com.rishabh.myapplication;
 
 import android.content.Context;
 import android.nfc.Tag;
@@ -68,21 +68,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             mouseMoved=false;
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            disX = event.getX()- initX; //Mouse movement in x direction
-                            disY = event.getY()- initY; //Mouse movement in y direction
-                            /*set init to new position so that continuous mouse movement
-                            is captured*/
+                            disX = event.getX()- initX;
+                            disY = event.getY()- initY;
                             initX = event.getX();
                             initY = event.getY();
                             if(disX !=0|| disY !=0){
-                                out.println(disX +","+ disY); //send mouse movement to server
+                                new SendMessage().execute(disX +","+ disY);
                             }
                             mouseMoved=true;
                             break;
                         case MotionEvent.ACTION_UP:
                             //consider a tap only if usr did not move mouse after ACTION_DOWN
                             if(!mouseMoved){
-                                //out.println(Constants.MOUSE_LEFT_CLICK);
+                                new SendMessage().execute(Constants.MOUSE_LEFT_CLICK);
                             }
                     }
                 }
@@ -91,22 +89,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    public class SendMessage extends AsyncTask<String,Void,Void>{
+        @Override
+        protected Void doInBackground(String... params) {
+            out.println(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.d("SendMessage","message sent");
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.playPauseButton:
                 if (isConnected && out!=null) {
-                    out.println(Constants.PLAY);//send "play" to server
+                    new SendMessage().execute(Constants.PLAY);
                 }
                 break;
             case R.id.nextButton:
                 if (isConnected && out!=null) {
-                    out.println(Constants.NEXT); //send "next" to server
+                    new SendMessage().execute(Constants.NEXT);
                 }
                 break;
             case R.id.previousButton:
                 if (isConnected && out!=null) {
-                    out.println(Constants.PREVIOUS); //send "previous" to server
+                    new SendMessage().execute(Constants.PREVIOUS);
                 }
                 break;
         }
