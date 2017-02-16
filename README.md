@@ -18,5 +18,5 @@ Just enter the server IP address.
 Now, you are all set to control your pc from your android device.
 
 ## Limitation
-For some reason, all chracters typed in the keyboard of your android device are not recognized properly on the server side.
+For some reason, all characters typed in the keyboard of your android device are not being properly recognized on the server side.
 Still working on it, and soon the app will be flawless.
