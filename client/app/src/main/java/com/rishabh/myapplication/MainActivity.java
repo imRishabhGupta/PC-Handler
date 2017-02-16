@@ -110,14 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        String str=event.getDisplayLabel()+"";
-
-        Log.d("key event is ",event.getUnicodeChar()+"");
-        if(!event.isShiftPressed())
-            Log.d("key pressed is ",str.toLowerCase());
-        else
-            Log.d("key pressed is ",str.toUpperCase());
-
+        
         if(event.getUnicodeChar()!=0)
             new SendMessage().execute("key-"+event.getUnicodeChar());
         return super.onKeyUp(keyCode, event);
