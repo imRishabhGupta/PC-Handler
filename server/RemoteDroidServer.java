@@ -44,13 +44,12 @@ public class RemoteDroidServer {
 			System.out.println("connected "+isConnected);
 		//read input from client while it  is connected
 	    while(isConnected){      
-	    	System.out.println("working");
 	        try{
 			line = in.readLine(); //read input from client
 			System.out.println(line); //print whatever we get from client
 			
 			//if user clicks on next
-			if(line.equalsIgnoreCase("next")){8+648
+			if(line.equalsIgnoreCase("next")){
 				//Simulate press and release of key 'n'
 				robot.keyPress(KeyEvent.VK_N);
 				robot.keyRelease(KeyEvent.VK_N);
@@ -63,9 +62,30 @@ public class RemoteDroidServer {
 			}
 			else if(line.contains("key-")){
 				int unicode=Integer.parseInt(line.split("-")[1]);
-				if(unicode!=0){
-					robot.keyPress(unicode);
-					robot.keyRelease(unicode);
+				System.out.println("unicode is "+unicode);
+				int keyCode=KeyEvent.getExtendedKeyCodeForChar(unicode);
+				System.out.println("keycode is "+keyCode);
+				try{
+				
+				if(unicode>=65 && unicode<=90){
+					robot.keyPress(KeyEvent.VK_SHIFT);
+					robot.keyPress(keyCode);
+					robot.keyRelease(keyCode);
+					robot.keyRelease(KeyEvent.VK_SHIFT);
+				}
+				else{
+					robot.keyPress(keyCode);
+					robot.keyRelease(keyCode);
+				}
+				}catch(Exception ex){
+					try{
+					robot.keyPress(KeyEvent.VK_SHIFT);
+					robot.keyPress(keyCode);
+					robot.keyRelease(keyCode);
+					robot.keyRelease(KeyEvent.VK_SHIFT);
+					}catch(Exception e){
+						System.out.println(e.toString());
+					}
 				}
 			}
 			//if user clicks on play/pause
