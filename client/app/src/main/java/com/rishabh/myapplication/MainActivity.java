@@ -1,8 +1,11 @@
    package com.rishabh.myapplication;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.nfc.Tag;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +16,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        
+
         if(event.getUnicodeChar()!=0)
             new SendMessage().execute("key-"+event.getUnicodeChar());
         return super.onKeyUp(keyCode, event);
@@ -157,8 +162,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //noinspection SimplifiableIfStatement
         if(id == R.id.action_connect) {
-            ConnectPhoneTask connectPhoneTask = new ConnectPhoneTask();
-            connectPhoneTask.execute(Constants.SERVER_IP); //try to connect to server in another thread
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+            alertDialog.setTitle("Enter Server IP Address");
+            //alertDialog.setMessage("Enter Server IP address");
+
+            final EditText input = new EditText(MainActivity.this);
+            SharedPreferences preferences=getSharedPreferences("remote",MODE_PRIVATE);
+            String serverIP=preferences.getString("server_ip","");
+            input.setText(serverIP);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            input.setLayoutParams(lp);
+            lp.setMargins(100,100,100,100);
+            alertDialog.setView(input);
+            alertDialog.setIcon(R.drawable.ic_cast_white_24dp);
+
+            alertDialog.setPositiveButton("YES",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            String server_ip = input.getText().toString();
+                            ConnectPhoneTask connectPhoneTask = new ConnectPhoneTask();
+                            connectPhoneTask.execute(server_ip);
+                        }
+                    });
+
+            alertDialog.setNegativeButton("NO",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+            alertDialog.show();
+
             return true;
         }
 
@@ -174,10 +211,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             boolean result = true;
             try {
                 InetAddress serverAddr = InetAddress.getByName(params[0]);
+
                 socket = new Socket(serverAddr, Constants.SERVER_PORT);//Open socket on server IP and port
             } catch (IOException e) {
                 Log.e(TAG, "Error while connecting", e);
                 result = false;
+            }
+            if(result){
+                SharedPreferences.Editor editor=getSharedPreferences("remote",MODE_PRIVATE).edit();
+                editor.putString("server_ip",params[0]);
             }
             return result;
         }
